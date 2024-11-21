@@ -1,0 +1,97 @@
+{% extends 'user_management/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Back to Dashboard Button -->
+    <div class="mb-3">
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <h2>My Loans</h2>
+    
+    {% if loans %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Fine</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.book.title }}</td>
+                    <td>{{ loan.issue_date|date:"M d, Y" }}</td>
+                    <td>{{ loan.due_date|date:"M d, Y" }}</td>
+                    <td>{{ loan.status|title }}</td>
+                    <td>
+                        {% if loan.fine_amount > 0 %}
+                            ${{ loan.fine_amount }}
+                            {% if not loan.fine_paid %}
+                                <form method="post" action="{% url 'circulation:pay_fine' loan.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-warning">Pay Fine</button>
+                                </form>
+                            {% else %}
+                                <span class="badge bg-success">Paid</span>
+                            {% endif %}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if loan.status == 'issued' %}
+                            <form method="post" action="{% url 'circulation:return_book' loan.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-primary">Return</button>
+                            </form>
+                            <form method="post" action="{% url 'circulation:renew_book' loan.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-success">Renew</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No active loans.</p>
+    {% endif %}
+
+    <h2 class="mt-4">My Holds</h2>
+    {% if holds %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hold in holds %}
+                <tr>
+                    <td>{{ hold.book.title }}</td>
+                    <td>{{ hold.request_date|date:"M d, Y" }}</td>
+                    <td>{{ hold.status|title }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No active holds.</p>
+    {% endif %}
+</div>
+{% endblock %} 

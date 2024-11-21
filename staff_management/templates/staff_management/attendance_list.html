@@ -1,0 +1,161 @@
+{% extends 'user_management/base.html' %}
+
+{% block title %}Attendance Records{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg border-0">
+    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center py-3">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'staff:staff_dashboard' %}" class="btn btn-light btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <h2 class="mb-0">
+                <i class="fas fa-clock me-2"></i>Attendance Records
+            </h2>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'staff:attendance_report' %}" class="btn btn-info text-white">
+                <i class="fas fa-chart-bar me-2"></i>View Reports
+            </a>
+            <a href="{% url 'staff:attendance_create' %}" class="btn btn-light">
+                <i class="fas fa-plus me-2"></i>Record Attendance
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body p-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Date Filter -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <form method="get" class="d-flex gap-2">
+                    <input type="date" 
+                           name="date" 
+                           class="form-control"
+                           value="{{ selected_date|date:'Y-m-d' }}"
+                           max="{{ today|date:'Y-m-d' }}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter me-2"></i>Filter
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if attendance %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Staff Member</th>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in attendance %}
+                            <tr>
+                                <td>{{ record.staff_member.user.get_full_name }}</td>
+                                <td>{{ record.date|date:"M d, Y" }}</td>
+                                <td>{{ record.check_in|time:"H:i" }}</td>
+                                <td>{{ record.check_out|time:"H:i"|default:"-" }}</td>
+                                <td>
+                                    {% if record.status == 'PRESENT' %}
+                                        <span class="badge bg-success">Present</span>
+                                    {% elif record.status == 'ABSENT' %}
+                                        <span class="badge bg-danger">Absent</span>
+                                    {% elif record.status == 'LATE' %}
+                                        <span class="badge bg-warning text-dark">Late</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Half Day</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if record.duration %}
+                                        {{ record.duration|floatformat:1 }} hours
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'staff:attendance_edit' pk=record.pk %}" 
+                                           class="btn btn-sm btn-warning" 
+                                           title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'staff:attendance_delete' pk=record.pk %}" 
+                                           class="btn btn-sm btn-danger" 
+                                           title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-clock fa-3x text-muted mb-3"></i>
+                <p class="lead text-muted">No attendance records found for this date.</p>
+                <a href="{% url 'staff:attendance_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Record Attendance
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.btn-group .btn {
+    margin: 0 2px;
+    border-radius: 4px !important;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fc;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 0.8em;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78,115,223,0.25);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
+</script>
+{% endblock %} 

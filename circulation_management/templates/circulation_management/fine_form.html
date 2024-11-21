@@ -1,0 +1,34 @@
+{% extends 'user_management/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Update Fine</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Loan Details</h5>
+                        <p><strong>User:</strong> {{ object.user.get_full_name }}</p>
+                        <p><strong>Book:</strong> {{ object.book.title }}</p>
+                        <p><strong>Due Date:</strong> {{ object.due_date|date:"M d, Y" }}</p>
+                        <p><strong>Return Date:</strong> {{ object.return_date|date:"M d, Y"|default:"Not returned" }}</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Update Fine</button>
+                            <a href="{% url 'circulation:manage_fines' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

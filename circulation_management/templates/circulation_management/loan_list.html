@@ -1,0 +1,114 @@
+{% extends 'user_management/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Back to Dashboard Button -->
+    <div class="mb-3">
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Manage Loans</h1>
+        <a href="{% url 'circulation:loan_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create New Loan
+        </a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>User</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Fine</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in loans %}
+                        <tr>
+                            <td>{{ loan.book.title }}</td>
+                            <td>{{ loan.user.get_full_name }}</td>
+                            <td>{{ loan.issue_date|date:"M d, Y" }}</td>
+                            <td>{{ loan.due_date|date:"M d, Y" }}</td>
+                            <td>
+                                <span class="badge bg-{% if loan.status == 'issued' %}primary{% elif loan.status == 'returned' %}success{% elif loan.status == 'overdue' %}danger{% else %}warning{% endif %}">
+                                    {{ loan.status|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if loan.fine_amount > 0 %}
+                                    ${{ loan.fine_amount }}
+                                    {% if loan.fine_paid %}
+                                        <span class="badge bg-success">Paid</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Unpaid</span>
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    {% if loan.status == 'issued' %}
+                                    <form method="post" action="{% url 'circulation:return_book' loan.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-primary" title="Return Book">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'circulation:renew_book' loan.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success" title="Renew Book">
+                                            <i class="fas fa-sync"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    <a href="{% url 'circulation:loan_update' loan.pk %}" class="btn btn-sm btn-warning" title="Edit Loan">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'circulation:loan_delete' loan.pk %}" class="btn btn-sm btn-danger" title="Delete Loan">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    {% if loan.fine_amount > 0 and not loan.fine_paid %}
+                                    <a href="{% url 'circulation:fine_update' loan.pk %}" class="btn btn-sm btn-info" title="Manage Fine">
+                                        <i class="fas fa-money-bill"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No loans found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.btn-group {
+    gap: 5px;
+}
+
+.btn-group .btn {
+    border-radius: 4px !important;
+}
+
+.badge {
+    font-size: 0.85em;
+    padding: 0.35em 0.65em;
+}
+</style>
+{% endblock %} 

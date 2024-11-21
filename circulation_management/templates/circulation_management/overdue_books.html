@@ -1,0 +1,54 @@
+{% extends 'user_management/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Overdue Books</h1>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Overdue Loans</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="overdueTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>User</th>
+                            <th>Due Date</th>
+                            <th>Days Overdue</th>
+                            <th>Fine Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in overdue_loans %}
+                        <tr>
+                            <td>{{ loan.book.title }}</td>
+                            <td>{{ loan.user.get_full_name }}</td>
+                            <td>{{ loan.due_date|date:"M d, Y" }}</td>
+                            <td>{{ loan.due_date|timesince }}</td>
+                            <td>${{ loan.fine_amount }}</td>
+                            <td>
+                                <form method="post" action="{% url 'circulation:return_book' loan.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-primary">Return</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('#overdueTable').DataTable();
+});
+</script>
+{% endblock %} 

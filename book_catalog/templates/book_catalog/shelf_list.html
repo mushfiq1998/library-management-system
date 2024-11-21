@@ -1,0 +1,119 @@
+{% extends 'user_management/base.html' %}
+
+{% block title %}Library Shelves{% endblock %}
+
+{% block content %}
+<div class="card shadow-lg border-0">
+    <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center py-3">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'dashboard' %}" class="btn btn-light btn-sm" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <h2 class="mb-0"><i class="fas fa-shelf me-2"></i>Library Shelves</h2>
+        </div>
+        {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+        <a href="{% url 'shelf_create' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Shelf
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card-body p-4">
+        {% if shelves %}
+        <div class="row g-4">
+            {% for shelf in shelves %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">
+                                <i class="fas fa-bookmark me-2"></i>{{ shelf.name }}
+                            </h5>
+                            <span class="badge bg-info">
+                                {{ shelf.book_locations.count }} Books
+                            </span>
+                        </div>
+                        
+                        <div class="shelf-info mb-3">
+                            <p class="mb-1">
+                                <i class="fas fa-building me-2"></i>Floor: {{ shelf.floor }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-map-marker-alt me-2"></i>Section: {{ shelf.section }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-th me-2"></i>Size: {{ shelf.total_rows }} rows × {{ shelf.total_columns }} columns
+                            </p>
+                        </div>
+
+                        {% if shelf.description %}
+                        <p class="card-text text-muted">{{ shelf.description|truncatewords:30 }}</p>
+                        {% endif %}
+
+                        {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+                        <div class="mt-3">
+                            <a href="{% url 'shelf_edit' pk=shelf.pk %}" class="btn btn-sm btn-warning me-2">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{% url 'shelf_delete' pk=shelf.pk %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-shelf fa-3x text-muted mb-3"></i>
+            <p class="lead text-muted">No shelves available.</p>
+            {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+            <a href="{% url 'shelf_create' %}" class="btn btn-primary mt-3">
+                <i class="fas fa-plus me-2"></i>Add Your First Shelf
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+}
+
+.shelf-info p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 0.8em;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.col-md-6 {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+</style>
+{% endblock %} 

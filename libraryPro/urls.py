@@ -12,8 +12,15 @@ urlpatterns = [
     path('', redirect_to_login, name='home'), 
     path('', include('user_management.urls')),
     path('', include('book_catalog.urls')),
-    path('circulation/', include('circulation_management.urls', namespace='circulation')),
-    path('inventory/', include('inventory_management.urls', namespace='inventory')),
-    path('staff/', include('staff_management.urls', namespace='staff')),
-    path('membership/', include('membership_management.urls', namespace='membership')),
+    path('circulation/', include(
+        'circulation_management.urls', namespace='circulation')),
+    path('inventory/', include(
+        'inventory_management.urls', namespace='inventory')),
+    path('staff/', include(
+        'staff_management.urls', namespace='staff')),
+    path('membership/', include(
+        'membership_management.urls', namespace='membership')),
+    path('digital/', include(
+        'digital_library.urls', namespace='digital')),
+    path('digital-library/', include('digital_library.urls', namespace='digital_library')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

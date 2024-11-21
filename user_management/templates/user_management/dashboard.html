@@ -188,6 +188,59 @@
         </div>
 
         <div class="card mt-3">
+            <div class="card-header section-header" data-bs-toggle="collapse" data-bs-target="#digitalLibraryMenu" aria-expanded="true">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Digital Library</h5>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="collapse show" id="digitalLibraryMenu">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'digital_library:content_list' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tablet-alt me-2"></i>Browse Digital Content
+                    </a>
+                    <a href="{% url 'digital_library:my_loans' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-book-reader me-2"></i>My Digital Loans
+                    </a>
+                    {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+                    <a href="{% url 'digital_library:content_create' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-plus me-2"></i>Add Digital Content
+                    </a>
+                    {% endif %}
+                    
+                    <!-- Digital Content Types -->
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">Content Types</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'digital_library:content_list' %}?content_type=EBOOK" class="list-group-item list-group-item-action ps-4">
+                        <i class="fas fa-file-pdf me-2"></i>eBooks
+                    </a>
+                    <a href="{% url 'digital_library:content_list' %}?content_type=AUDIOBOOK" class="list-group-item list-group-item-action ps-4">
+                        <i class="fas fa-headphones me-2"></i>Audiobooks
+                    </a>
+                    
+                    <!-- Progress Tracking -->
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">My Progress</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'digital_library:content_list' %}?status=in_progress" class="list-group-item list-group-item-action ps-4">
+                        <i class="fas fa-clock me-2"></i>In Progress
+                    </a>
+                    <a href="{% url 'digital_library:content_list' %}?status=completed" class="list-group-item list-group-item-action ps-4">
+                        <i class="fas fa-check-circle me-2"></i>Completed
+                    </a>
+                    <a href="{% url 'digital_library:content_list' %}?status=bookmarked" class="list-group-item list-group-item-action ps-4">
+                        <i class="fas fa-bookmark me-2"></i>Bookmarked
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
             <div class="card-header section-header" data-bs-toggle="collapse" data-bs-target="#circulationMenu" aria-expanded="true">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Circulation Management</h5>

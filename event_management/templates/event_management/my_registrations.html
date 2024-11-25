@@ -1,0 +1,159 @@
+{% extends 'user_management/base.html' %}
+
+{% block title %}My Event Registrations{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Navigation Breadcrumb -->
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'dashboard' %}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'event:event_list' %}">Events</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">My Registrations</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-ticket-alt me-2"></i>My Event Registrations</h2>
+        </div>
+    </div>
+
+    <!-- Registration Tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">
+                <i class="fas fa-calendar-alt me-2"></i>Upcoming Events
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#past">
+                <i class="fas fa-history me-2"></i>Past Events
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- Upcoming Events -->
+        <div class="tab-pane fade show active" id="upcoming">
+            {% with registrations=upcoming_registrations %}
+            {% if registrations %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for registration in registrations %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if registration.event.image %}
+                        <img src="{{ registration.event.image.url }}" class="card-img-top" alt="{{ registration.event.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ registration.event.title }}</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-calendar me-2"></i>{{ registration.event.start_date|date:"F j, Y, g:i a" }}
+                            </p>
+                            
+                            <!-- Registration Status -->
+                            <div class="mb-3">
+                                <span class="badge {% if registration.status == 'CONFIRMED' %}bg-success
+                                                  {% elif registration.status == 'PENDING' %}bg-warning
+                                                  {% else %}bg-danger{% endif %}">
+                                    {{ registration.get_status_display }}
+                                </span>
+                            </div>
+
+                            {% if registration.notes %}
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-comment me-2"></i>Notes: {{ registration.notes }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'event:event_detail' pk=registration.event.pk %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-info-circle me-2"></i>Event Details
+                            </a>
+                            {% if registration.status != 'CANCELLED' %}
+                            <a href="{% url 'event:registration_cancel' pk=registration.pk %}" class="btn btn-danger btn-sm float-end">
+                                <i class="fas fa-times me-2"></i>Cancel Registration
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>You have no upcoming event registrations.
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Past Events -->
+        <div class="tab-pane fade" id="past">
+            {% with registrations=past_registrations %}
+            {% if registrations %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for registration in registrations %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if registration.event.image %}
+                        <img src="{{ registration.event.image.url }}" class="card-img-top" alt="{{ registration.event.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ registration.event.title }}</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-calendar me-2"></i>{{ registration.event.start_date|date:"F j, Y, g:i a" }}
+                            </p>
+                            
+                            <!-- Attendance Status -->
+                            <div class="mb-3">
+                                <span class="badge {% if registration.status == 'ATTENDED' %}bg-success
+                                                  {% else %}bg-secondary{% endif %}">
+                                    {{ registration.get_status_display }}
+                                </span>
+                            </div>
+
+                            {% if not registration.feedback %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-star me-2"></i>Don't forget to provide feedback!
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'event:event_detail' pk=registration.event.pk %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-info-circle me-2"></i>Event Details
+                            </a>
+                            {% if not registration.feedback %}
+                            <a href="{% url 'event:submit_feedback' pk=registration.event.pk %}" class="btn btn-warning btn-sm float-end">
+                                <i class="fas fa-star me-2"></i>Submit Feedback
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>You have no past event registrations.
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

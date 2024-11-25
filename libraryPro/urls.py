@@ -22,5 +22,8 @@ urlpatterns = [
         'membership_management.urls', namespace='membership')),
     path('digital/', include(
         'digital_library.urls', namespace='digital')),
-    path('digital-library/', include('digital_library.urls', namespace='digital_library')),
+    path('digital-library/', include(
+        'digital_library.urls', namespace='digital_library')),
+    path('event/', include(
+        'event_management.urls', namespace='event')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

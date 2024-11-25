@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'staff_management',
     'membership_management',
     'digital_library',
+    'event_management',
 ]
 
 MIDDLEWARE = [

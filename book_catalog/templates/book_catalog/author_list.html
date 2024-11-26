@@ -5,31 +5,33 @@
 {% block content %}
 <div class="container py-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0"><i class="fas fa-users me-2"></i>Authors</h2>
-            <div>
-                {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
-                <a href="{% url 'author_create' %}" class="btn btn-light hover-scale me-2">
-                    <i class="fas fa-plus me-2"></i>Add Author
-                </a>
-                {% endif %}
-                <a href="{% url 'dashboard' %}" class="btn btn-light hover-scale">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                </a>
+        <div class="card-header bg-gradient-primary text-white">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <h2 class="mb-0 mb-md-0"><i class="fas fa-users me-2"></i>Authors</h2>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+                    <a href="{% url 'author_create' %}" class="btn btn-light hover-scale w-100 w-sm-auto">
+                        <i class="fas fa-plus me-2"></i>Add Author
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-light hover-scale w-100 w-sm-auto">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                </div>
             </div>
         </div>
         <div class="card-body bg-light">
             {% if authors %}
-            <div class="row">
+            <div class="row g-4">
                 {% for author in authors %}
-                <div class="col-md-4 mb-4 fade-in-up">
+                <div class="col-12 col-sm-6 col-lg-4 fade-in-up">
                     <div class="card h-100 border-0 shadow-sm hover-card">
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="author-avatar me-3">
+                            <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start mb-3 gap-2">
+                                <div class="author-avatar mb-2 mb-sm-0">
                                     <i class="fas fa-user-circle fa-3x text-primary"></i>
                                 </div>
-                                <div>
+                                <div class="text-center text-sm-start">
                                     <h5 class="card-title mb-1">{{ author.name }}</h5>
                                     <p class="text-muted mb-0">
                                         <i class="fas fa-book me-1"></i>
@@ -46,15 +48,15 @@
                                 <p class="card-text text-truncate">{{ author.biography }}</p>
                                 {% endif %}
                             </div>
-                            <div class="mt-3 d-flex justify-content-end gap-2">
-                                <a href="{% url 'author_detail' pk=author.pk %}" class="btn btn-info btn-sm hover-scale-sm">
+                            <div class="mt-3 d-flex flex-wrap justify-content-center justify-content-sm-end gap-2">
+                                <a href="{% url 'author_detail' pk=author.pk %}" class="btn btn-info btn-sm hover-scale-sm flex-grow-1 flex-sm-grow-0">
                                     <i class="fas fa-eye me-1"></i>View
                                 </a>
                                 {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
-                                <a href="{% url 'author_edit' pk=author.pk %}" class="btn btn-warning btn-sm hover-scale-sm">
+                                <a href="{% url 'author_edit' pk=author.pk %}" class="btn btn-warning btn-sm hover-scale-sm flex-grow-1 flex-sm-grow-0">
                                     <i class="fas fa-edit me-1"></i>Edit
                                 </a>
-                                <a href="{% url 'author_delete' pk=author.pk %}" class="btn btn-danger btn-sm hover-scale-sm">
+                                <a href="{% url 'author_delete' pk=author.pk %}" class="btn btn-danger btn-sm hover-scale-sm flex-grow-1 flex-sm-grow-0">
                                     <i class="fas fa-trash me-1"></i>Delete
                                 </a>
                                 {% endif %}
@@ -206,5 +208,20 @@
     background-color: #e02d1b;
     border-color: #d52a1a;
 }
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .author-info {
+        min-height: 60px;
+    }
+    
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+    }
+}
 </style>
-{% endblock %} 
+{% endblock %}

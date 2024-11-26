@@ -4,24 +4,26 @@
 {% block title %}{{ action }} Book Location{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-3 py-md-5">
     <div class="card shadow-lg border-0 mx-auto" style="max-width: 800px;">
         <div class="card-header bg-gradient-primary text-white">
-            <h2 class="mb-0">{{ action }} Location for "{{ book.title }}"</h2>
+            <h2 class="h3 mb-0">{{ action }} Location for "{{ book.title }}"</h2>
         </div>
         <div class="card-body">
-            <form method="post" class="p-3">
+            <form method="post" class="p-2 p-md-3">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-md-12 mb-4">
+                    <div class="col-12 mb-4">
                         {{ form.shelf|as_crispy_field }}
                     </div>
                 </div>
                 
                 <div class="shelf-grid-container mt-4 mb-4" style="display: none;">
-                    <h4 class="text-primary mb-3">Shelf Grid View</h4>
-                    <div class="shelf-grid">
-                        <!-- Grid will be populated by JavaScript -->
+                    <h4 class="h5 text-primary mb-3">Shelf Grid View</h4>
+                    <div class="shelf-grid-wrapper overflow-auto">
+                        <div class="shelf-grid">
+                            <!-- Grid will be populated by JavaScript -->
+                        </div>
                     </div>
                     <div class="mt-3">
                         <small class="text-muted">
@@ -30,20 +32,20 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row g-3">
+                    <div class="col-12 col-sm-6">
                         {{ form.row|as_crispy_field }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-12 col-sm-6">
                         {{ form.column|as_crispy_field }}
                     </div>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <button type="submit" class="btn btn-primary btn-lg">
+                <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-2">
+                    <button type="submit" class="btn btn-primary w-100 w-sm-auto">
                         <i class="fas fa-save me-2"></i>Save Location
                     </button>
-                    <a href="{% url 'book_detail' pk=book.pk %}" class="btn btn-secondary btn-lg ms-2">
+                    <a href="{% url 'book_detail' pk=book.pk %}" class="btn btn-secondary w-100 w-sm-auto">
                         <i class="fas fa-times me-2"></i>Cancel
                     </a>
                 </div>
@@ -53,17 +55,22 @@
 </div>
 
 <style>
+.shelf-grid-wrapper {
+    max-width: 100%;
+    border-radius: 8px;
+    background: #f8f9fa;
+    padding: 10px;
+}
+
 .shelf-grid {
     display: inline-grid;
     gap: 4px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    min-width: min-content;
 }
 
 .shelf-cell {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border: 1px solid #dee2e6;
     display: flex;
     align-items: center;
@@ -72,6 +79,14 @@
     background: white;
     transition: all 0.2s;
     border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+    .shelf-cell {
+        width: 60px;
+        height: 60px;
+    }
 }
 
 .shelf-cell:hover {
@@ -104,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to create the grid
     function createGrid(rows, cols, occupiedPositions) {
-        grid.style.gridTemplateColumns = `repeat(${cols}, 60px)`;
+        grid.style.gridTemplateColumns = `repeat(${cols}, ${window.innerWidth >= 768 ? '60px' : '50px'})`;
         grid.innerHTML = '';
 
         for (let i = 1; i <= rows; i++) {
@@ -173,6 +188,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (shelfSelect.value) {
         shelfSelect.dispatchEvent(new Event('change'));
     }
+
+    // Update grid on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (shelfSelect.value) {
+                shelfSelect.dispatchEvent(new Event('change'));
+            }
+        }, 250);
+    });
 });
 </script>
-{% endblock %} 
+{% endblock %}

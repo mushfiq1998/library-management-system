@@ -12,47 +12,53 @@
         </a>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         <!-- Book Details Card -->
-        <div class="col-md-8">
+        <div class="col-12 col-lg-8">
             <div class="card shadow mb-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h2 class="h4 mb-0">{{ book.title }}</h2>
-                    <div>
-                        {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
-                        <a href="{% url 'book_edit' pk=book.pk %}" class="btn btn-light btn-sm">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        {% endif %}
-                        <a href="{% url 'book_pdf' pk=book.pk %}" class="btn btn-light btn-sm">
-                            <i class="fas fa-file-pdf"></i> PDF
-                        </a>
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
+                        <h2 class="h4 mb-0">{{ book.title }}</h2>
+                        <div class="d-flex gap-2">
+                            {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+                            <a href="{% url 'book_edit' pk=book.pk %}" class="btn btn-light btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'book_pdf' pk=book.pk %}" class="btn btn-light btn-sm">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <!-- Basic Information -->
                     <div class="mb-4">
                         <h3 class="h5 text-primary">Basic Information</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-                                <p><strong>Language:</strong> {{ book.get_language_display }}</p>
-                                <p><strong>Publication Date:</strong> {{ book.publication_date }}</p>
+                        <div class="row gy-2">
+                            <div class="col-12 col-sm-6">
+                                <p class="mb-2"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                                <p class="mb-2"><strong>Language:</strong> {{ book.get_language_display }}</p>
+                                <p class="mb-2"><strong>Publication Date:</strong> {{ book.publication_date }}</p>
                             </div>
-                            <div class="col-md-6">
-                                <p>
+                            <div class="col-12 col-sm-6">
+                                <p class="mb-2">
                                     <strong>Authors:</strong>
-                                    {% for author in book.authors.all %}
-                                    <a href="{% url 'author_detail' pk=author.pk %}" class="badge bg-info text-decoration-none">
-                                        {{ author.name }}
-                                    </a>
-                                    {% endfor %}
+                                    <div class="d-flex flex-wrap gap-1 mt-1">
+                                        {% for author in book.authors.all %}
+                                        <a href="{% url 'author_detail' pk=author.pk %}" class="badge bg-info text-decoration-none">
+                                            {{ author.name }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
                                 </p>
-                                <p>
+                                <p class="mb-2">
                                     <strong>Genres:</strong>
-                                    {% for genre in book.genres.all %}
-                                    <span class="badge bg-secondary">{{ genre.name }}</span>
-                                    {% endfor %}
+                                    <div class="d-flex flex-wrap gap-1 mt-1">
+                                        {% for genre in book.genres.all %}
+                                        <span class="badge bg-secondary">{{ genre.name }}</span>
+                                        {% endfor %}
+                                    </div>
                                 </p>
                             </div>
                         </div>
@@ -61,11 +67,11 @@
                     <!-- Availability Status -->
                     <div class="mb-4">
                         <h3 class="h5 text-primary">Availability</h3>
-                        <div class="d-flex align-items-center mb-2">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                             <span class="badge {% if book.availability_status == 'AVAILABLE' %}bg-success
                                              {% elif book.availability_status == 'ISSUED' %}bg-warning
                                              {% elif book.availability_status == 'RESERVED' %}bg-info
-                                             {% else %}bg-secondary{% endif %} me-2">
+                                             {% else %}bg-secondary{% endif %}">
                                 {{ book.get_availability_status_display }}
                             </span>
                             {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
@@ -107,7 +113,7 @@
         </div>
 
         <!-- Reviews Card -->
-        <div class="col-md-4">
+        <div class="col-12 col-lg-4">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h3 class="h4 mb-0">Reviews</h3>
@@ -134,7 +140,7 @@
                         <form method="post">
                             {% csrf_token %}
                             {{ review_form|crispy }}
-                            <div class="text-end mt-3">
+                            <div class="d-flex flex-wrap justify-content-end gap-2 mt-3">
                                 {% if user_review %}
                                 <button type="submit" name="delete_review" class="btn btn-danger btn-sm">
                                     Delete Review
@@ -155,7 +161,7 @@
                         <div class="reviews-list">
                             {% for review in other_reviews %}
                             <div class="review-item mb-3 p-3 border rounded">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-2">
                                     <span class="fw-bold">{{ review.user.get_full_name|default:review.user.username }}</span>
                                     <div class="text-warning">
                                         {% for i in "12345"|make_list %}
@@ -200,5 +206,15 @@
 .fa-star-o {
     color: #dee2e6;
 }
+
+@media (max-width: 576px) {
+    .card-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}
 </style>
-{% endblock %} 
+{% endblock %}

@@ -6,14 +6,14 @@
 <div class="reader-container">
     <!-- Top Navigation Bar -->
     <nav class="reader-nav bg-dark text-white py-2 px-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <div class="d-flex align-items-center mb-2 mb-sm-0">
                 <a href="{% url 'digital_library:content_detail' pk=content.pk %}" class="btn btn-outline-light btn-sm">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
-                <h5 class="mb-0 ms-3">{{ content.title }}</h5>
+                <h5 class="mb-0 ms-3 text-truncate">{{ content.title }}</h5>
             </div>
-            <div class="reader-controls">
+            <div class="reader-controls d-flex flex-wrap gap-2">
                 <button class="btn btn-outline-light btn-sm" id="zoomOut">
                     <i class="fas fa-search-minus"></i>
                 </button>
@@ -21,11 +21,11 @@
                 <button class="btn btn-outline-light btn-sm" id="zoomIn">
                     <i class="fas fa-search-plus"></i>
                 </button>
-                <button class="btn btn-outline-light btn-sm ms-3" id="addBookmark">
-                    <i class="fas fa-bookmark me-1"></i>Bookmark
+                <button class="btn btn-outline-light btn-sm" id="addBookmark">
+                    <i class="fas fa-bookmark me-1"></i><span class="d-none d-sm-inline">Bookmark</span>
                 </button>
-                <button class="btn btn-outline-light btn-sm ms-2" id="addNote">
-                    <i class="fas fa-sticky-note me-1"></i>Add Note
+                <button class="btn btn-outline-light btn-sm" id="addNote">
+                    <i class="fas fa-sticky-note me-1"></i><span class="d-none d-sm-inline">Add Note</span>
                 </button>
             </div>
         </div>
@@ -35,7 +35,7 @@
     <div class="reader-content">
         <div class="row g-0">
             <!-- Sidebar -->
-            <div class="col-md-3 reader-sidebar bg-light">
+            <div class="col-md-3 col-lg-2 reader-sidebar bg-light">
                 <div class="p-3">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
@@ -57,12 +57,12 @@
                                     {% for bookmark in progress.bookmarks %}
                                     <button class="list-group-item list-group-item-action" 
                                             data-position="{{ bookmark.position }}">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h6 class="mb-1">{{ bookmark.title }}</h6>
+                                        <div class="d-flex w-100 justify-content-between flex-wrap">
+                                            <h6 class="mb-1 text-truncate">{{ bookmark.title }}</h6>
                                             <small>Page {{ bookmark.position }}</small>
                                         </div>
                                         {% if bookmark.note %}
-                                            <small class="text-muted">{{ bookmark.note }}</small>
+                                            <small class="text-muted d-block text-break">{{ bookmark.note }}</small>
                                         {% endif %}
                                     </button>
                                     {% endfor %}
@@ -83,7 +83,7 @@
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
-                                        <p class="mb-1">{{ note }}</p>
+                                        <p class="mb-1 text-break">{{ note }}</p>
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -96,7 +96,7 @@
             </div>
 
             <!-- Content Viewer -->
-            <div class="col-md-9">
+            <div class="col-md-9 col-lg-10">
                 <div class="content-viewer">
                     {% if content.file %}
                         {% if content.file_format == 'PDF' %}
@@ -118,7 +118,7 @@
 
 <!-- Bookmark Modal -->
 <div class="modal fade" id="bookmarkModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Bookmark</h5>
@@ -146,7 +146,7 @@
 
 <!-- Note Modal -->
 <div class="modal fade" id="noteModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Note</h5>
@@ -234,6 +234,30 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+@media (max-width: 767.98px) {
+    .reader-sidebar {
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .content-viewer {
+        height: calc(100vh - 248px);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .reader-nav {
+        padding: 0.5rem !important;
+    }
+    
+    .reader-controls {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
 </style>
 
 {% block extra_js %}
@@ -251,6 +275,11 @@ document.addEventListener('DOMContentLoaded', function() {
             height: "100%"
         });
         rendition.display();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            rendition.resize();
+        });
     }
     
     // Zoom controls

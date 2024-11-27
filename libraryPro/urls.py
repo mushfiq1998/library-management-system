@@ -26,4 +26,6 @@ urlpatterns = [
         'digital_library.urls', namespace='digital_library')),
     path('event/', include(
         'event_management.urls', namespace='event')),
+    path('finance/', include(
+        'finance_management.urls', namespace='finance')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

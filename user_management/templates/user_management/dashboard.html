@@ -338,6 +338,92 @@
                         </div>
                     </div>
                 </div>
+
+                {% if user.role == 'ADMIN' or user.role == 'LIBRARIAN' %}
+                <div class="card mt-3">
+                    <div class="card-header section-header" data-bs-toggle="collapse" data-bs-target="#financialMenu" aria-expanded="true">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Financial Management</h5>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="collapse show" id="financialMenu">
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'finance:dashboard' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-chart-line me-2"></i>Financial Dashboard
+                            </a>
+                            
+                            <!-- Transaction Management -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Transaction Management</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'finance:transaction_list' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-exchange-alt me-2"></i>View Transactions
+                            </a>
+                            <a href="{% url 'finance:transaction_create' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-plus me-2"></i>Create Transaction
+                            </a>
+                            
+                            <!-- Income Management -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Income Management</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'finance:income_list' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-plus-circle me-2"></i>View Income
+                            </a>
+                            <a href="{% url 'finance:income_create' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-plus me-2"></i>Create Income
+                            </a>
+
+                            <!-- Expense Management -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Expense Management</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'finance:expense_list' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-minus-circle me-2"></i>View Expenses
+                            </a>
+                            <a href="{% url 'finance:expense_create' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-minus me-2"></i>Create Expense
+                            </a>
+                            
+                            <!-- Fine Management -->
+                            <!-- <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Fine Management</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'finance:fine_list' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-exclamation-circle me-2"></i>View Fines
+                            </a>
+                            <a href="{% url 'finance:fine_collection' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-hand-holding-usd me-2"></i>Collect Fines
+                            </a> -->
+                            
+                            <!-- Reports -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">Financial Reports</span>
+                                </div>
+                            </div>
+                            <a href="{% url 'finance:income_report' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-chart-bar me-2"></i>Income Report
+                            </a>
+                            <a href="{% url 'finance:expense_report' %}" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-chart-pie me-2"></i>Expense Report
+                            </a>
+                            <a href="{% url 'finance:generate_report' %}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-export me-2"></i>Generate Reports
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'membership_management',
     'digital_library',
     'event_management',
+    'finance_management.apps.FinanceManagementConfig',
 ]
 
 MIDDLEWARE = [

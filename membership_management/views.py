@@ -44,7 +44,9 @@ def membership_edit(request, pk):
 @user_passes_test(is_admin)
 def membership_plan_list(request):
     plans = MembershipPlan.objects.all()
-    return render(request, 'membership_management/membership_plan_list.html', {'plans': plans})
+    context = {'plans': plans}
+    return render(
+        request, 'membership_management/membership_plan_list.html', context)
 
 @login_required
 @user_passes_test(is_admin)

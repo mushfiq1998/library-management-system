@@ -18,12 +18,12 @@
     </nav>
 
     <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">
+        <div class="card-header bg-primary text-white d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
+            <h3 class="mb-0 fs-4">
                 <i class="fas fa-history me-2"></i>Member Activities
             </h3>
-            <div class="d-flex gap-2">
-                <a href="{% url 'dashboard' %}" class="btn btn-light me-2">
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <a href="{% url 'dashboard' %}" class="btn btn-light">
                     <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                 </a>
                 <a href="{% url 'membership:activity_create' %}" class="btn btn-light">
@@ -31,7 +31,7 @@
                 </a>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-2 p-sm-3">
             {% if activities %}
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -47,10 +47,10 @@
                         <tbody>
                             {% for activity in activities %}
                             <tr>
-                                <td>{{ activity.activity_date|date:"Y-m-d H:i" }}</td>
+                                <td class="text-nowrap">{{ activity.activity_date|date:"Y-m-d H:i" }}</td>
                                 <td>
                                     {% with user=activity.membership.user %}
-                                        {{ user.get_full_name|default:user.username }}
+                                        <span class="text-break">{{ user.get_full_name|default:user.username }}</span>
                                     {% endwith %}
                                 </td>
                                 <td>
@@ -65,7 +65,7 @@
                                         {{ activity.get_activity_type_display }}
                                     </span>
                                 </td>
-                                <td>{{ activity.description }}</td>
+                                <td class="text-break">{{ activity.description }}</td>
                                 <td>
                                     <div class="btn-group">
                                         <a href="{% url 'membership:activity_edit' activity.pk %}" 
@@ -84,7 +84,7 @@
 
                             <!-- Delete Modal -->
                             <div class="modal fade" id="deleteModal{{ activity.pk }}" tabindex="-1">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header bg-danger text-white">
                                             <h5 class="modal-title">
@@ -123,49 +123,49 @@
         </div>
     </div>
 
-    <!-- Activity Summary Card -->
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
+    <!-- Activity Summary Cards -->
+    <div class="row mt-4 g-3">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-primary text-white h-100">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title fs-6">
                         <i class="fas fa-chart-line me-2"></i>Total Activities
                     </h5>
-                    <p class="display-4">{{ activities|length }}</p>
+                    <p class="display-5 mb-0">{{ activities|length }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-success text-white h-100">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title fs-6">
                         <i class="fas fa-sync me-2"></i>Renewals
                     </h5>
-                    <p class="display-4">
+                    <p class="display-5 mb-0">
                         {{ activities|filter_by_type:'RENEW'|length }}
                     </p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-dark">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-warning text-dark h-100">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title fs-6">
                         <i class="fas fa-clock me-2"></i>Expirations
                     </h5>
-                    <p class="display-4">
+                    <p class="display-5 mb-0">
                         {{ activities|filter_by_type:'EXPIRE'|length }}
                     </p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-info text-white h-100">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title fs-6">
                         <i class="fas fa-money-bill-wave me-2"></i>Payments
                     </h5>
-                    <p class="display-4">
+                    <p class="display-5 mb-0">
                         {{ activities|filter_by_type:'PAYMENT'|length }}
                     </p>
                 </div>
@@ -173,4 +173,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

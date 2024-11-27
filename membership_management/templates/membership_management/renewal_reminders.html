@@ -18,17 +18,19 @@
     </nav>
 
     <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">
-                <i class="fas fa-bell me-2"></i>Renewal Reminders
-            </h3>
-            <div class="d-flex gap-2">
-                <a href="{% url 'dashboard' %}" class="btn btn-light me-2">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                </a>
-                <a href="{% url 'membership:reminder_create' %}" class="btn btn-light">
-                    <i class="fas fa-plus me-2"></i>Create Reminder
-                </a>
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <h3 class="mb-0">
+                    <i class="fas fa-bell me-2"></i>Renewal Reminders
+                </h3>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'dashboard' %}" class="btn btn-light">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{% url 'membership:reminder_create' %}" class="btn btn-light">
+                        <i class="fas fa-plus me-2"></i>Create Reminder
+                    </a>
+                </div>
             </div>
         </div>
         <div class="card-body">
@@ -78,7 +80,7 @@
                                                       method="post" class="dropdown-item">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="response" value="RENEWED">
-                                                    <button type="submit" class="btn btn-link text-success p-0">
+                                                    <button type="submit" class="btn btn-link text-success p-0 w-100 text-start">
                                                         <i class="fas fa-check me-2"></i>Renewed
                                                     </button>
                                                 </form>
@@ -88,7 +90,7 @@
                                                       method="post" class="dropdown-item">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="response" value="DECLINED">
-                                                    <button type="submit" class="btn btn-link text-danger p-0">
+                                                    <button type="submit" class="btn btn-link text-danger p-0 w-100 text-start">
                                                         <i class="fas fa-times me-2"></i>Declined
                                                     </button>
                                                 </form>
@@ -98,7 +100,7 @@
                                                       method="post" class="dropdown-item">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="response" value="NO_RESPONSE">
-                                                    <button type="submit" class="btn btn-link text-warning p-0">
+                                                    <button type="submit" class="btn btn-link text-warning p-0 w-100 text-start">
                                                         <i class="fas fa-question me-2"></i>No Response
                                                     </button>
                                                 </form>
@@ -120,47 +122,47 @@
     </div>
 
     <!-- Statistics Cards -->
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
+    <div class="row mt-4 g-3">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-primary text-white h-100">
                 <div class="card-body">
                     <h5 class="card-title">
                         <i class="fas fa-clock me-2"></i>Pending
                     </h5>
-                    <p class="display-4">{{ reminders|filter_pending|length }}</p>
+                    <p class="display-4 mb-0">{{ reminders|filter_pending|length }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-success text-white h-100">
                 <div class="card-body">
                     <h5 class="card-title">
                         <i class="fas fa-check-circle me-2"></i>Renewed
                     </h5>
-                    <p class="display-4">{{ reminders|filter_renewed|length }}</p>
+                    <p class="display-4 mb-0">{{ reminders|filter_renewed|length }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-dark">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-warning text-dark h-100">
                 <div class="card-body">
                     <h5 class="card-title">
                         <i class="fas fa-exclamation-circle me-2"></i>Expiring
                     </h5>
-                    <p class="display-4">{{ reminders|filter_expired|length }}</p>
+                    <p class="display-4 mb-0">{{ reminders|filter_expired|length }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card bg-info text-white h-100">
                 <div class="card-body">
                     <h5 class="card-title">
                         <i class="fas fa-bell me-2"></i>Total
                     </h5>
-                    <p class="display-4">{{ reminders|length }}</p>
+                    <p class="display-4 mb-0">{{ reminders|length }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

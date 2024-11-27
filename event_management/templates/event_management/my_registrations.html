@@ -3,7 +3,7 @@
 {% block title %}My Event Registrations{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-3 py-md-4">
     <!-- Navigation Breadcrumb -->
     <div class="row mb-3">
         <div class="col">
@@ -17,7 +17,7 @@
                     <li class="breadcrumb-item">
                         <a href="{% url 'event:event_list' %}">Events</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">My Registrations</li>
+                    <li class="breadcrumb-item active text-break" aria-current="page">My Registrations</li>
                 </ol>
             </nav>
         </div>
@@ -26,19 +26,19 @@
     <!-- Page Header -->
     <div class="row mb-4">
         <div class="col">
-            <h2><i class="fas fa-ticket-alt me-2"></i>My Event Registrations</h2>
+            <h2 class="text-break"><i class="fas fa-ticket-alt me-2"></i>My Event Registrations</h2>
         </div>
     </div>
 
     <!-- Registration Tabs -->
-    <ul class="nav nav-tabs mb-4">
+    <ul class="nav nav-tabs mb-4 flex-column flex-sm-row">
         <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">
+            <a class="nav-link active w-100 text-center text-sm-start" data-bs-toggle="tab" href="#upcoming">
                 <i class="fas fa-calendar-alt me-2"></i>Upcoming Events
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#past">
+            <a class="nav-link w-100 text-center text-sm-start" data-bs-toggle="tab" href="#past">
                 <i class="fas fa-history me-2"></i>Past Events
             </a>
         </li>
@@ -50,16 +50,16 @@
         <div class="tab-pane fade show active" id="upcoming">
             {% with registrations=upcoming_registrations %}
             {% if registrations %}
-            <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
                 {% for registration in registrations %}
                 <div class="col">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         {% if registration.event.image %}
-                        <img src="{{ registration.event.image.url }}" class="card-img-top" alt="{{ registration.event.title }}">
+                        <img src="{{ registration.event.image.url }}" class="card-img-top object-fit-cover" style="height: 200px;" alt="{{ registration.event.title }}">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ registration.event.title }}</h5>
-                            <p class="card-text text-muted">
+                            <h5 class="card-title text-break">{{ registration.event.title }}</h5>
+                            <p class="card-text text-muted small">
                                 <i class="fas fa-calendar me-2"></i>{{ registration.event.start_date|date:"F j, Y, g:i a" }}
                             </p>
                             
@@ -74,19 +74,19 @@
 
                             {% if registration.notes %}
                             <div class="mb-3">
-                                <small class="text-muted">
+                                <small class="text-muted text-break">
                                     <i class="fas fa-comment me-2"></i>Notes: {{ registration.notes }}
                                 </small>
                             </div>
                             {% endif %}
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between">
                             <a href="{% url 'event:event_detail' pk=registration.event.pk %}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-info-circle me-2"></i>Event Details
                             </a>
                             {% if registration.status != 'CANCELLED' %}
-                            <a href="{% url 'event:registration_cancel' pk=registration.pk %}" class="btn btn-danger btn-sm float-end">
-                                <i class="fas fa-times me-2"></i>Cancel Registration
+                            <a href="{% url 'event:registration_cancel' pk=registration.pk %}" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times me-2"></i>Cancel
                             </a>
                             {% endif %}
                         </div>
@@ -95,7 +95,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="alert alert-info">
+            <div class="alert alert-info d-flex align-items-center">
                 <i class="fas fa-info-circle me-2"></i>You have no upcoming event registrations.
             </div>
             {% endif %}
@@ -106,16 +106,16 @@
         <div class="tab-pane fade" id="past">
             {% with registrations=past_registrations %}
             {% if registrations %}
-            <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
                 {% for registration in registrations %}
                 <div class="col">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         {% if registration.event.image %}
-                        <img src="{{ registration.event.image.url }}" class="card-img-top" alt="{{ registration.event.title }}">
+                        <img src="{{ registration.event.image.url }}" class="card-img-top object-fit-cover" style="height: 200px;" alt="{{ registration.event.title }}">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ registration.event.title }}</h5>
-                            <p class="card-text text-muted">
+                            <h5 class="card-title text-break">{{ registration.event.title }}</h5>
+                            <p class="card-text text-muted small">
                                 <i class="fas fa-calendar me-2"></i>{{ registration.event.start_date|date:"F j, Y, g:i a" }}
                             </p>
                             
@@ -128,18 +128,18 @@
                             </div>
 
                             {% if not registration.feedback %}
-                            <div class="alert alert-warning">
+                            <div class="alert alert-warning d-flex align-items-center py-2">
                                 <i class="fas fa-star me-2"></i>Don't forget to provide feedback!
                             </div>
                             {% endif %}
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-flex flex-wrap gap-2 justify-content-between">
                             <a href="{% url 'event:event_detail' pk=registration.event.pk %}" class="btn btn-primary btn-sm">
                                 <i class="fas fa-info-circle me-2"></i>Event Details
                             </a>
                             {% if not registration.feedback %}
-                            <a href="{% url 'event:submit_feedback' pk=registration.event.pk %}" class="btn btn-warning btn-sm float-end">
-                                <i class="fas fa-star me-2"></i>Submit Feedback
+                            <a href="{% url 'event:submit_feedback' pk=registration.event.pk %}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-star me-2"></i>Feedback
                             </a>
                             {% endif %}
                         </div>
@@ -148,7 +148,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="alert alert-info">
+            <div class="alert alert-info d-flex align-items-center">
                 <i class="fas fa-info-circle me-2"></i>You have no past event registrations.
             </div>
             {% endif %}
@@ -156,4 +156,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

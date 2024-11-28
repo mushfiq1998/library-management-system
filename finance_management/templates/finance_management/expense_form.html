@@ -11,8 +11,8 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">
+                <div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                    <h6 class="m-0 mb-2 mb-sm-0 font-weight-bold text-primary">
                         {% if form.instance.pk %}Edit Expense{% else %}Create New Expense{% endif %}
                     </h6>
                     <a href="{% url 'finance:expense_list' %}" class="btn btn-secondary">
@@ -34,24 +34,24 @@
                         
                         <div class="row">
                             <!-- Category -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.category|as_crispy_field }}
                             </div>
 
                             <!-- Amount -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.amount|as_crispy_field }}
                             </div>
                         </div>
 
                         <div class="row">
                             <!-- Payment Method -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.payment_method|as_crispy_field }}
                             </div>
 
                             <!-- Paid To -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.paid_to|as_crispy_field }}
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6 mb-4 mb-sm-0">
                             <h6 class="font-weight-bold">Categories</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-check text-success me-2"></i>Staff Salary</li>
@@ -95,7 +95,7 @@
                                 <li><i class="fas fa-check text-success me-2"></i>Software/Digital Resources</li>
                             </ul>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-sm-6">
                             <h6 class="font-weight-bold">Payment Methods</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-money-bill text-success me-2"></i>Cash</li>
@@ -163,6 +163,25 @@
     .btn-primary:hover {
         background-color: #2e59d9;
         border-color: #2653d4;
+    }
+    
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 1rem;
+        }
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+        .form-control {
+            font-size: 0.9rem;
+        }
+        .list-unstyled {
+            font-size: 0.9rem;
+        }
+        h6 {
+            font-size: 1rem;
+        }
     }
 </style>
 {% endblock %}

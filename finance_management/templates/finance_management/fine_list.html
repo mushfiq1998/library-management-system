@@ -6,10 +6,10 @@
 {% block content %}
 <div class="container-fluid">
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Fine List</h6>
-            <div>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+        <div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+            <h6 class="m-0 mb-2 mb-sm-0 font-weight-bold text-primary">Fine List</h6>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-primary mb-2 mb-sm-0" data-bs-toggle="modal" data-bs-target="#filterModal">
                     <i class="fas fa-filter me-2"></i>Filter
                 </button>
                 <a href="{% url 'finance:dashboard' %}" class="btn btn-secondary">
@@ -24,9 +24,9 @@
                         <tr>
                             <th>User</th>
                             <th>Amount</th>
-                            <th>Reason</th>
-                            <th>Date Issued</th>
-                            <th>Due Date</th>
+                            <th class="d-none d-md-table-cell">Reason</th>
+                            <th class="d-none d-sm-table-cell">Date Issued</th>
+                            <th class="d-none d-lg-table-cell">Due Date</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -36,9 +36,9 @@
                         <tr>
                             <td>{{ fine.user.username }}</td>
                             <td>${{ fine.amount|floatformat:2 }}</td>
-                            <td>{{ fine.reason }}</td>
-                            <td>{{ fine.date_issued|date:"Y-m-d H:i" }}</td>
-                            <td>{{ fine.due_date|date:"Y-m-d H:i" }}</td>
+                            <td class="d-none d-md-table-cell">{{ fine.reason }}</td>
+                            <td class="d-none d-sm-table-cell">{{ fine.date_issued|date:"Y-m-d H:i" }}</td>
+                            <td class="d-none d-lg-table-cell">{{ fine.due_date|date:"Y-m-d H:i" }}</td>
                             <td>
                                 <span class="badge {% if fine.paid %}bg-success{% else %}bg-warning{% endif %}">
                                     {% if fine.paid %}Paid{% else %}Pending{% endif %}
@@ -63,7 +63,7 @@
 
                         <!-- Detail Modal -->
                         <div class="modal fade" id="detailModal{{ fine.id }}" tabindex="-1">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Fine Details</h5>
@@ -71,45 +71,45 @@
                                     </div>
                                     <div class="modal-body">
                                         <dl class="row">
-                                            <dt class="col-sm-4">User:</dt>
-                                            <dd class="col-sm-8">{{ fine.user.username }}</dd>
+                                            <dt class="col-5 col-sm-4">User:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.user.username }}</dd>
 
-                                            <dt class="col-sm-4">Amount:</dt>
-                                            <dd class="col-sm-8">${{ fine.amount|floatformat:2 }}</dd>
+                                            <dt class="col-5 col-sm-4">Amount:</dt>
+                                            <dd class="col-7 col-sm-8">${{ fine.amount|floatformat:2 }}</dd>
 
-                                            <dt class="col-sm-4">Date Issued:</dt>
-                                            <dd class="col-sm-8">{{ fine.date_issued|date:"Y-m-d H:i" }}</dd>
+                                            <dt class="col-5 col-sm-4">Date Issued:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.date_issued|date:"Y-m-d H:i" }}</dd>
 
-                                            <dt class="col-sm-4">Due Date:</dt>
-                                            <dd class="col-sm-8">{{ fine.due_date|date:"Y-m-d H:i" }}</dd>
+                                            <dt class="col-5 col-sm-4">Due Date:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.due_date|date:"Y-m-d H:i" }}</dd>
 
-                                            <dt class="col-sm-4">Status:</dt>
-                                            <dd class="col-sm-8">
+                                            <dt class="col-5 col-sm-4">Status:</dt>
+                                            <dd class="col-7 col-sm-8">
                                                 <span class="badge {% if fine.paid %}bg-success{% else %}bg-warning{% endif %}">
                                                     {% if fine.paid %}Paid{% else %}Pending{% endif %}
                                                 </span>
                                             </dd>
 
-                                            <dt class="col-sm-4">Reason:</dt>
-                                            <dd class="col-sm-8">{{ fine.reason }}</dd>
+                                            <dt class="col-5 col-sm-4">Reason:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.reason }}</dd>
 
                                             {% if fine.paid %}
-                                            <dt class="col-sm-4">Payment Date:</dt>
-                                            <dd class="col-sm-8">{{ fine.payment_date|date:"Y-m-d H:i" }}</dd>
+                                            <dt class="col-5 col-sm-4">Payment Date:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.payment_date|date:"Y-m-d H:i" }}</dd>
 
-                                            <dt class="col-sm-4">Transaction:</dt>
-                                            <dd class="col-sm-8">{{ fine.transaction.transaction_id }}</dd>
+                                            <dt class="col-5 col-sm-4">Transaction:</dt>
+                                            <dd class="col-7 col-sm-8">{{ fine.transaction.transaction_id }}</dd>
                                             {% endif %}
                                         </dl>
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer flex-column flex-sm-row">
                                         {% if not fine.paid %}
                                         <a href="{% url 'finance:fine_collection' %}?fine_id={{ fine.id }}" 
-                                           class="btn btn-success">
+                                           class="btn btn-success w-100 w-sm-auto mb-2 mb-sm-0">
                                             <i class="fas fa-hand-holding-usd me-2"></i>Collect Payment
                                         </a>
                                         {% endif %}
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary w-100 w-sm-auto" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
 
 <!-- Filter Modal -->
 <div class="modal fade" id="filterModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Filter Fines</h5>
@@ -146,14 +146,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date Range</label>
-                        <div class="input-group">
-                            <input type="date" name="start_date" class="form-control">
-                            <span class="input-group-text">to</span>
-                            <input type="date" name="end_date" class="form-control">
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <input type="date" name="start_date" class="form-control" placeholder="Start Date">
+                            <input type="date" name="end_date" class="form-control" placeholder="End Date">
                         </div>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Apply Filter</button>
+                        <button type="submit" class="btn btn-primary w-100 w-sm-auto">Apply Filter</button>
                     </div>
                 </form>
             </div>
@@ -166,7 +165,9 @@
     $(document).ready(function() {
         $('#fineTable').DataTable({
             "order": [[3, "desc"]],
-            "pageLength": 25
+            "pageLength": 25,
+            responsive: true,
+            autoWidth: false
         });
     });
 </script>
@@ -180,9 +181,18 @@
     .btn-group {
         gap: 0.25rem;
     }
-    .modal-dialog {
-        max-width: 600px;
+    @media (max-width: 576px) {
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-footer {
+            justify-content: center;
+        }
+    }
+    .table {
+        min-width: 800px;
     }
 </style>
 {% endblock %}
-{% endblock %} 
+{% endblock %}

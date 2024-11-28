@@ -11,8 +11,8 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">
+                <div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                    <h6 class="m-0 mb-2 mb-sm-0 font-weight-bold text-primary">
                         {% if form.instance.pk %}Edit Income{% else %}Create New Income{% endif %}
                     </h6>
                     <a href="{% url 'finance:income_list' %}" class="btn btn-secondary">
@@ -34,24 +34,24 @@
                         
                         <div class="row">
                             <!-- Category -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.category|as_crispy_field }}
                             </div>
 
                             <!-- Amount -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.amount|as_crispy_field }}
                             </div>
                         </div>
 
                         <div class="row">
                             <!-- Payment Method -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.payment_method|as_crispy_field }}
                             </div>
 
                             <!-- Received From -->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-sm-6 mb-3">
                                 {{ form.received_from|as_crispy_field }}
                             </div>
                         </div>
@@ -83,8 +83,8 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="font-weight-bold">Categories</h6>
+                        <div class="col-12 col-sm-6 mb-4 mb-sm-0">
+                            <h6 class="font-weight-bold mb-3">Categories</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-check text-success me-2"></i>Library Fine</li>
                                 <li><i class="fas fa-check text-success me-2"></i>Membership Fee</li>
@@ -93,8 +93,8 @@
                                 <li><i class="fas fa-check text-success me-2"></i>Printing Service</li>
                             </ul>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="font-weight-bold">Payment Methods</h6>
+                        <div class="col-12 col-sm-6">
+                            <h6 class="font-weight-bold mb-3">Payment Methods</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-money-bill text-success me-2"></i>Cash</li>
                                 <li><i class="fas fa-credit-card text-success me-2"></i>Card</li>
@@ -160,6 +160,15 @@
     .btn-primary:hover {
         background-color: #2e59d9;
         border-color: #2653d4;
+    }
+    @media (max-width: 576px) {
+        .card-header h6 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            width: 100%;
+        }
     }
 </style>
 {% endblock %}

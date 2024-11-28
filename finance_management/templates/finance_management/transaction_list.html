@@ -6,9 +6,9 @@
 {% block content %}
 <div class="container-fluid">
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
             <h6 class="m-0 font-weight-bold text-primary">Transaction List</h6>
-            <div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
                     <i class="fas fa-filter me-2"></i>Filter
                 </button>
@@ -35,22 +35,22 @@
                     <tbody>
                         {% for transaction in transactions %}
                         <tr>
-                            <td>{{ transaction.transaction_id }}</td>
-                            <td>{{ transaction.date|date:"Y-m-d H:i" }}</td>
-                            <td>
+                            <td data-label="Transaction ID">{{ transaction.transaction_id }}</td>
+                            <td data-label="Date">{{ transaction.date|date:"Y-m-d H:i" }}</td>
+                            <td data-label="Type">
                                 <span class="badge {% if transaction.type == 'INCOME' %}bg-success{% else %}bg-danger{% endif %}">
                                     {{ transaction.type }}
                                 </span>
                             </td>
-                            <td>{{ transaction.category }}</td>
-                            <td>${{ transaction.amount|floatformat:2 }}</td>
-                            <td>{{ transaction.payment_method }}</td>
-                            <td>
+                            <td data-label="Category">{{ transaction.category }}</td>
+                            <td data-label="Amount">${{ transaction.amount|floatformat:2 }}</td>
+                            <td data-label="Payment Method">{{ transaction.payment_method }}</td>
+                            <td data-label="Status">
                                 <span class="badge {% if transaction.status == 'COMPLETED' %}bg-success{% else %}bg-warning{% endif %}">
                                     {{ transaction.status }}
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="Actions">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-info" 
                                             data-bs-toggle="modal" 
@@ -70,7 +70,7 @@
 
                         <!-- Detail Modal -->
                         <div class="modal fade" id="detailModal{{ transaction.id }}" tabindex="-1">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Transaction Details</h5>
@@ -128,7 +128,7 @@
 
 <!-- Filter Modal -->
 <div class="modal fade" id="filterModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Filter Transactions</h5>
@@ -155,14 +155,14 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Date Range</label>
-                        <div class="input-group">
+                        <div class="input-group flex-column flex-sm-row gap-2 gap-sm-0">
                             <input type="date" name="start_date" class="form-control">
-                            <span class="input-group-text">to</span>
+                            <span class="input-group-text d-none d-sm-block">to</span>
                             <input type="date" name="end_date" class="form-control">
                         </div>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Apply Filter</button>
+                        <button type="submit" class="btn btn-primary w-100 w-sm-auto">Apply Filter</button>
                     </div>
                 </form>
             </div>
@@ -175,7 +175,8 @@
     $(document).ready(function() {
         $('#transactionTable').DataTable({
             "order": [[1, "desc"]],
-            "pageLength": 25
+            "pageLength": 25,
+            responsive: true
         });
     });
 </script>
@@ -186,11 +187,47 @@
     .badge {
         font-size: 0.875rem;
     }
+    
     .table td {
         vertical-align: middle;
     }
+    
     .btn-group {
         gap: 0.25rem;
+    }
+
+    @media screen and (max-width: 767px) {
+        table thead {
+            display: none;
+        }
+        
+        table tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+        }
+        
+        table td {
+            display: block;
+            text-align: right;
+            padding: 0.5rem;
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        table td:last-child {
+            border-bottom: none;
+        }
+        
+        table td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+        }
+        
+        .btn-group {
+            justify-content: flex-end;
+        }
     }
 </style>
 {% endblock %}

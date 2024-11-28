@@ -9,8 +9,8 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Generate Financial Report</h6>
+                <div class="card-header py-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                    <h6 class="m-0 mb-2 mb-sm-0 font-weight-bold text-primary">Generate Financial Report</h6>
                     <a href="{% url 'finance:dashboard' %}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                     </a>
@@ -35,10 +35,10 @@
 
                         <!-- Date Range -->
                         <div class="row mb-4">
-                            <div class="col-md-6">
+                            <div class="col-12 col-sm-6 mb-3 mb-sm-0">
                                 {{ form.start_date|as_crispy_field }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-sm-6">
                                 {{ form.end_date|as_crispy_field }}
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                         <!-- Quick Date Selections -->
                         <div class="mb-4">
                             <label class="form-label">Quick Select</label>
-                            <div class="btn-group w-100" role="group">
+                            <div class="d-grid d-sm-flex gap-2">
                                 <button type="button" class="btn btn-outline-primary" onclick="setDateRange('today')">
                                     Today
                                 </button>
@@ -78,16 +78,16 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="font-weight-bold">Available Reports</h6>
+                        <div class="col-12 col-sm-6 mb-4 mb-sm-0">
+                            <h6 class="font-weight-bold mb-3">Available Reports</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-check text-success me-2"></i>All Transactions</li>
                                 <li><i class="fas fa-check text-success me-2"></i>Income Only</li>
                                 <li><i class="fas fa-check text-success me-2"></i>Expenses Only</li>
                             </ul>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="font-weight-bold">Features</h6>
+                        <div class="col-12 col-sm-6">
+                            <h6 class="font-weight-bold mb-3">Features</h6>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-file-excel text-success me-2"></i>Export to Excel</li>
                                 <li><i class="fas fa-print text-success me-2"></i>Print Report</li>
@@ -148,19 +148,25 @@ document.querySelector('form').addEventListener('submit', function(event) {
         background-color: #f8f9fc;
         border-bottom: 1px solid #e3e6f0;
     }
-    .btn-group {
-        gap: 0.5rem;
-    }
-    .btn-group .btn {
-        flex: 1;
+    .btn {
+        white-space: nowrap;
     }
     .list-unstyled li {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
     }
     .form-control:focus {
         border-color: #4e73df;
         box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
     }
+    @media (max-width: 576px) {
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        .card-body {
+            padding: 1rem;
+        }
+    }
 </style>
 {% endblock %}
-{% endblock %} 
+{% endblock %}

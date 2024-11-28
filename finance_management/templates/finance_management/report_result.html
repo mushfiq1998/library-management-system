@@ -6,32 +6,34 @@
 {% block content %}
 <div class="container-fluid">
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">Report Results</h6>
-            <div>
-                <button class="btn btn-success" onclick="exportToExcel()">
-                    <i class="fas fa-file-excel me-2"></i>Export to Excel
-                </button>
-                <button class="btn btn-danger" onclick="window.print()">
-                    <i class="fas fa-print me-2"></i>Print Report
-                </button>
-                <a href="{% url 'finance:generate_report' %}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Report Generator
-                </a>
+        <div class="card-header py-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                <h6 class="m-0 font-weight-bold text-primary">Report Results</h6>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <button class="btn btn-success" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel me-2"></i>Export to Excel
+                    </button>
+                    <button class="btn btn-danger" onclick="window.print()">
+                        <i class="fas fa-print me-2"></i>Print Report
+                    </button>
+                    <a href="{% url 'finance:generate_report' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Report Generator
+                    </a>
+                </div>
             </div>
         </div>
         <div class="card-body">
             <!-- Report Header -->
             <div class="mb-4">
                 <h5 class="font-weight-bold">Report Parameters</h5>
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row g-3">
+                    <div class="col-12 col-sm-6 col-md-4">
                         <p><strong>Report Type:</strong> {{ report_type|title }}</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-sm-6 col-md-4">
                         <p><strong>Start Date:</strong> {{ start_date|date:"Y-m-d" }}</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-sm-6 col-md-4">
                         <p><strong>End Date:</strong> {{ end_date|date:"Y-m-d" }}</p>
                     </div>
                 </div>
@@ -39,8 +41,8 @@
 
             <!-- Summary Card -->
             <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card border-left-primary">
+                <div class="col-12 col-md-6">
+                    <div class="card border-left-primary h-100">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -68,21 +70,21 @@
                             <th>Date</th>
                             <th>Category</th>
                             <th>Amount</th>
-                            <th>Payment Method</th>
-                            <th>Description</th>
+                            <th class="d-none d-md-table-cell">Payment Method</th>
+                            <th class="d-none d-lg-table-cell">Description</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for transaction in transactions %}
                         <tr>
-                            <td>{{ transaction.transaction_id }}</td>
-                            <td>{{ transaction.date|date:"Y-m-d H:i" }}</td>
-                            <td>{{ transaction.category }}</td>
-                            <td>${{ transaction.amount|floatformat:2 }}</td>
-                            <td>{{ transaction.payment_method }}</td>
-                            <td>{{ transaction.description }}</td>
-                            <td>
+                            <td data-label="Transaction ID">{{ transaction.transaction_id }}</td>
+                            <td data-label="Date">{{ transaction.date|date:"Y-m-d H:i" }}</td>
+                            <td data-label="Category">{{ transaction.category }}</td>
+                            <td data-label="Amount">${{ transaction.amount|floatformat:2 }}</td>
+                            <td class="d-none d-md-table-cell" data-label="Payment Method">{{ transaction.payment_method }}</td>
+                            <td class="d-none d-lg-table-cell" data-label="Description">{{ transaction.description }}</td>
+                            <td data-label="Status">
                                 <span class="badge {% if transaction.status == 'COMPLETED' %}bg-success{% else %}bg-warning{% endif %}">
                                     {{ transaction.status }}
                                 </span>
@@ -117,7 +119,9 @@
             "dom": 'Bfrtip',
             "buttons": [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+            ],
+            responsive: true,
+            autoWidth: false
         });
     });
 
@@ -143,6 +147,36 @@
         }
         .table {
             width: 100% !important;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .table td {
+            display: block;
+            text-align: right;
+            border: none;
+        }
+        
+        .table thead {
+            display: none;
+        }
+        
+        .table tr {
+            display: block;
+            border: 1px solid #dee2e6;
+            margin-bottom: 1rem;
         }
     }
 
